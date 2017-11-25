@@ -35,7 +35,7 @@ public class StepInstructionsAdapter extends RecyclerView.Adapter<StepInstructio
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View itemView = LayoutInflater.from(context).inflate(R.layout.step_list_item, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.step_instructions_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -52,9 +52,9 @@ public class StepInstructionsAdapter extends RecyclerView.Adapter<StepInstructio
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.step_desc_text_view)
+        @BindView(R.id.step_inst_desc_text_view)
         TextView DescNameText = null;
-        @BindView(R.id.step_card_view)
+        @BindView(R.id.step_inst_card_view)
         CardView cardView;
         private Step mStep;
 

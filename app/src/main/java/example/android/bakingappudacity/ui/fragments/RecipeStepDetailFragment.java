@@ -28,6 +28,7 @@ public class RecipeStepDetailFragment extends Fragment {
     private static final String POSITION = "pos";
     int postion;
     Recipe recipe;
+
     @BindView(R.id.rv_steps_inst)
     RecyclerView mStepInstructionsRecyclerView;
     StepInstructionsAdapter mStepInstructionsAdapter;
@@ -48,8 +49,9 @@ public class RecipeStepDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_recipe_step_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, rootView);
+
         mStepInstructionsAdapter = new StepInstructionsAdapter();
         mStepInstructionsRecyclerView.setNestedScrollingEnabled(false);
         mStepInstructionsRecyclerView.setAdapter(mStepInstructionsAdapter);
@@ -67,6 +69,7 @@ public class RecipeStepDetailFragment extends Fragment {
                 mStepInstructionsAdapter.updateAdapter(steps);
             }
         }
+
         return rootView;
     }
 

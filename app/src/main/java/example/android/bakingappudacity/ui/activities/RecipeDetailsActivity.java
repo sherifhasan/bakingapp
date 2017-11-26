@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import butterknife.ButterKnife;
 import example.android.bakingappudacity.R;
 import example.android.bakingappudacity.models.Recipe;
-import example.android.bakingappudacity.models.Step;
 import example.android.bakingappudacity.ui.fragments.RecipeIngredientFragment;
 import example.android.bakingappudacity.ui.fragments.RecipeStepDetailFragment;
 import example.android.bakingappudacity.ui.fragments.RecipeStepsFragment;
@@ -55,14 +54,14 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
     }
 
     @Override
-    public void setSelectedName(Recipe recipe,int pos) {
+    public void setSelectedName(Recipe recipe, int pos) {
         if (twoPanes) {
-            RecipeStepDetailFragment fragment = RecipeStepDetailFragment.newInstance(recipe,pos);
+            RecipeStepDetailFragment fragment = RecipeStepDetailFragment.newInstance(recipe, pos);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_step_container, fragment, RecipeStepDetailFragment.class.getSimpleName())
                     .commit();
         } else {
-            RecipeStepDetail.startActivity(getApplicationContext(), recipe,pos);
+            RecipeStepDetail.startActivity(getApplicationContext(), recipe, pos);
         }
     }
 }

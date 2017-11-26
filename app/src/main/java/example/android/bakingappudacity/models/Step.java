@@ -15,7 +15,7 @@ public class Step implements Parcelable {
     public static final Creator<Step> CREATOR = PaperParcelStep.CREATOR;
 
     @SerializedName("id")
-    String mStepId;
+    int mStepId;
     @SerializedName("shortDescription")
     String mShortDescription;
     @SerializedName("description")
@@ -25,7 +25,7 @@ public class Step implements Parcelable {
     @SerializedName("thumbnailURL")
     String mThumbnailURL;
 
-    public Step(String mStepId, String mShortDescription, String mDescription, String mVideoURL, String mThumbnailURL) {
+    public Step(int mStepId, String mShortDescription, String mDescription, String mVideoURL, String mThumbnailURL) {
         this.mStepId = mStepId;
         this.mShortDescription = mShortDescription;
         this.mDescription = mDescription;
@@ -43,7 +43,7 @@ public class Step implements Parcelable {
         PaperParcelStep.writeToParcel(this, parcel, i);
     }
 
-    public String getStepId() {
+    public int getStepId() {
         return mStepId;
     }
 

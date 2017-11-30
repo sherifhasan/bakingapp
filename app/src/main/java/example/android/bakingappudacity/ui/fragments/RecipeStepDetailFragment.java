@@ -96,14 +96,14 @@ public class RecipeStepDetailFragment extends Fragment {
                     mPlayer.stop();
                 }
                 currentPosition = Math.max(0, currentPosition - 1);
-                initViews(recipe.getSteps().get(currentPosition - 1));
+                initViews(recipe.getSteps().get(currentPosition));
                 break;
             case R.id.next_step:
                 if (mPlayer != null) {
                     mPlayer.stop();
                 }
                 currentPosition = Math.min(recipe.getSteps().size() - 1, currentPosition + 1);
-                initViews(recipe.getSteps().get(currentPosition + 1));
+                initViews(recipe.getSteps().get(currentPosition));
                 break;
         }
     }
@@ -151,7 +151,6 @@ public class RecipeStepDetailFragment extends Fragment {
         mPlayerContainer.setVisibility(View.VISIBLE);
 
         if (mPlayer == null) {
-            //  Handler mainHandler = new Handler();
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
             TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);

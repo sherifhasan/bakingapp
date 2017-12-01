@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_orange"
     tools:context="example.android.bakingappudacity.ui.activities.RecipeStepDetail">
 
     <android.support.design.widget.AppBarLayout
@@ -12,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/step_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -24,8 +25,7 @@
         android:id="@+id/fragment_step_container_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/some_large_space"
-        android:background="@color/light_orange" />
+        android:layout_marginTop="@dimen/some_large_space" />
 
 
 </android.support.design.widget.CoordinatorLayout>

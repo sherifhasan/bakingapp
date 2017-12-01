@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import example.android.bakingappudacity.R;
 import example.android.bakingappudacity.models.Recipe;
@@ -18,10 +19,10 @@ public class RecipeStepDetail extends AppCompatActivity {
 
     private static final String EXTRA_RECIPE = "Recipe";
     private static final String POSITION = "pos";
-    boolean twoPanes;
     Recipe recipe;
     int position;
-
+    @BindView(R.id.step_toolbar)
+    Toolbar toolbar;
 
     public static void startActivity(Context context, Recipe recipe, int postion) {
         if (context == null) {
@@ -37,7 +38,6 @@ public class RecipeStepDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_step_detail);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getIntent() != null && getIntent().hasExtra(EXTRA_RECIPE) && getIntent().getExtras().getParcelable(EXTRA_RECIPE) != null) {
             recipe = getIntent().getExtras().getParcelable(EXTRA_RECIPE);
@@ -49,6 +49,4 @@ public class RecipeStepDetail extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_step_container_detail, stepsFragment).commit();
         }
     }
-
-
 }

@@ -3,9 +3,12 @@ package example.android.bakingappudacity.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import example.android.bakingappudacity.R;
 import example.android.bakingappudacity.models.Recipe;
@@ -20,6 +23,11 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
     private static final String EXTRA_RECIPE = "Recipe";
     boolean twoPanes;
     Recipe recipe;
+    @BindView(R.id.details_toolbar)
+    Toolbar toolbar;
+    @Nullable
+    @BindView(R.id.fragment_step_container)
+    FrameLayout mFrame;
 
     public static void startActivity(Context context, Recipe recipe) {
         if (context == null) {
@@ -35,15 +43,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
         ButterKnife.bind(this);
-        Toolbar toolbar = ButterKnife.findById(this, R.id.details_toolbar);
         setSupportActionBar(toolbar);
-
-        twoPanes = findViewById(R.id.fragment_step_container) != null;
+        twoPanes = mFrame != null;
         if (getIntent() != null && getIntent().hasExtra(EXTRA_RECIPE) && getIntent().getExtras().getParcelable(EXTRA_RECIPE) != null) {
             recipe = getIntent().getExtras().getParcelable(EXTRA_RECIPE);
             getSupportActionBar().setTitle(recipe.getRecipeName());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
             RecipeIngredientFragment ingredientFragment = RecipeIngredientFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
             getSupportFragmentManager().beginTransaction().add(R.id.fragment1_container, ingredientFragment).commit();

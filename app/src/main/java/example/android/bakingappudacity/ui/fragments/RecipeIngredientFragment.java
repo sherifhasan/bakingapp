@@ -27,7 +27,7 @@ public class RecipeIngredientFragment extends Fragment {
     RecyclerView mIngredientRecyclerView;
     IngredientAdapter mIngredientAdapter;
     RecyclerView.LayoutManager mIngredientLayoutManager;
-
+    private Recipe recipe;
 
     public RecipeIngredientFragment() {
     }
@@ -52,11 +52,18 @@ public class RecipeIngredientFragment extends Fragment {
         mIngredientLayoutManager = new LinearLayoutManager(getActivity());
         mIngredientRecyclerView.setLayoutManager(mIngredientLayoutManager);
         mIngredientRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
-            Recipe recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
+        if (savedInstanceState == null) {
+            if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
+                recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
+                if (recipe.getIngredients() != null) {
+                    Log.d("Quantity: ", recipe.getIngredients().get(0).getQuantity());
+                    mIngredientAdapter.updateAdapter(recipe.getIngredients());
+                }
+            }
+        } else {
+            recipe = savedInstanceState.getParcelable(ARGUMENT_EXTRA);
             if (recipe.getIngredients() != null) {
-                Log.d("Quantity: ", recipe.getIngredients().get(0).getQuantity());
+                Log.d("Quantity: from saved ", recipe.getIngredients().get(0).getQuantity());
                 mIngredientAdapter.updateAdapter(recipe.getIngredients());
             }
         }
@@ -64,4 +71,9 @@ public class RecipeIngredientFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(ARGUMENT_EXTRA, recipe);
+    }
 }

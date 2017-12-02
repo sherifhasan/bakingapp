@@ -77,10 +77,16 @@ public class RecipeStepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, rootView);
-
-        if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
-            currentPosition = getArguments().getInt(POSITION);
-            recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
+        if (savedInstanceState == null) {
+            if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
+                currentPosition = getArguments().getInt(POSITION);
+                recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
+                if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
+                    initViews(recipe.getSteps().get(currentPosition));
+            }
+        } else {
+            recipe = savedInstanceState.getParcelable(ARGUMENT_EXTRA);
+            currentPosition = savedInstanceState.getInt(POSITION);
             if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
                 initViews(recipe.getSteps().get(currentPosition));
         }
@@ -190,5 +196,12 @@ public class RecipeStepDetailFragment extends Fragment {
         mPlayer.stop();
         mPlayer.release();
         mPlayer = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, currentPosition);
+        outState.putParcelable(ARGUMENT_EXTRA, recipe);
     }
 }

@@ -13,7 +13,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import example.android.bakingappudacity.R;
 import example.android.bakingappudacity.models.Recipe;
-import example.android.bakingappudacity.models.Step;
 import example.android.bakingappudacity.ui.adapters.StepAdapter;
 import example.android.bakingappudacity.utility.PanesHandler;
 
@@ -56,8 +55,15 @@ public class RecipeStepsFragment extends Fragment {
         mStepsRecyclerView.setLayoutManager(mStepLayoutManager);
         mStepsRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
-            recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
+        if (savedInstanceState == null) {
+            if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
+                recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
+                if (recipe.getSteps() != null) {
+                    mStepAdapter.updateAdapter(recipe.getSteps());
+                }
+            }
+        } else {
+            recipe = savedInstanceState.getParcelable(ARGUMENT_EXTRA);
             if (recipe.getSteps() != null) {
                 mStepAdapter.updateAdapter(recipe.getSteps());
             }
@@ -65,7 +71,7 @@ public class RecipeStepsFragment extends Fragment {
         mStepAdapter.setListener(new StepAdapter.Listener() {
             @Override
             public void onClick(int pos) {
-                ((PanesHandler) getActivity()).setSelectedName(recipe,pos);
+                ((PanesHandler) getActivity()).setSelectedName(recipe, pos);
 
             }
         });
@@ -76,4 +82,9 @@ public class RecipeStepsFragment extends Fragment {
         panesHandler = nameListener;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(ARGUMENT_EXTRA, recipe);
+    }
 }

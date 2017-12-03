@@ -54,8 +54,8 @@ public class RecipesFragment extends Fragment {
         mRecyclerView.setAdapter(mRecipeAdapter);
         mRecipeAdapter.setListener(new RecipeAdapter.Listener() {
             @Override
-            public void onClick(Recipe recipe) {
-                RecipeDetailsActivity.startActivity(getActivity(), recipe);
+            public void onClick(Recipe recipe,int position) {
+                RecipeDetailsActivity.startActivity(getActivity(), recipe,position);
             }
         });
         if (savedInstanceState == null) {

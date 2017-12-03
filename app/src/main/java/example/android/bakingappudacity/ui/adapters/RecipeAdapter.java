@@ -51,7 +51,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
             @Override
             public void onClick(View view) {
                 if (mListener != null) {
-                    mListener.onClick(recipe);
+                    mListener.onClick(recipe, position);
                 }
             }
         });
@@ -65,7 +65,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     }
 
     public static interface Listener {
-        void onClick(Recipe recipe);
+        void onClick(Recipe recipe, int position);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

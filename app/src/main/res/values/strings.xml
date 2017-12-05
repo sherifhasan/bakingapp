@@ -14,4 +14,6 @@
     <string name="title_activity_recipe_details">RecipeDetails</string>
     <string name="title_activity_recipe_step_detail">RecipeStepDetail</string>
     <string name="add_widget">Add widget</string>
+    <string name="add">added to widget</string>
+    <string name="appwidget_text">EXAMPLE</string>
 </resources>

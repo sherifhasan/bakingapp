@@ -48,13 +48,7 @@ public class RecipesActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.app_name));
-        if (savedInstanceState == null) {
-            mPresenter = new RecipePresenter(this);
-            mPresenter.onTakeView(this);
-        } else {
-            mRecipes = savedInstanceState.getParcelable(RECIPES_LIST);
-            mRecipeAdapter.updateAdapter(mRecipes);
-        }
+
         mRecipeAdapter = new RecipeAdapter();
         mLayoutManager = new GridLayoutManager(this, spanCount);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -67,8 +61,14 @@ public class RecipesActivity extends AppCompatActivity {
                 RecipeDetailsActivity.startActivity(RecipesActivity.this, recipe, position);
             }
         });
+        if (savedInstanceState == null) {
+            mPresenter = new RecipePresenter(this);
+            mPresenter.onTakeView(this);
+        } else {
+            mRecipes = savedInstanceState.getParcelable(RECIPES_LIST);
+            mRecipeAdapter.updateAdapter(mRecipes);
+        }
         getIdlingResource();
-
     }
 
     @VisibleForTesting

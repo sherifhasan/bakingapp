@@ -10,6 +10,7 @@ public class Utility {
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert cm != null;
         return cm.getActiveNetworkInfo() != null;
     }
 

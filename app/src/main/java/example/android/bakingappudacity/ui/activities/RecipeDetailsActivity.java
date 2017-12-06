@@ -75,6 +75,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
 
             RecipeStepsFragment stepsFragment = RecipeStepsFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
             getSupportFragmentManager().beginTransaction().add(R.id.fragment2_container, stepsFragment).commit();
+        } else {
+            if (mIdlingResource != null) {
+                mIdlingResource.setIdleState(false);
+            }
         }
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +93,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
                 Toast.makeText(RecipeDetailsActivity.this, recipe.getRecipeName() + " " + getString(R.string.add), Toast.LENGTH_LONG).show();
             }
         });
-
+        getIdlingResource();
     }
 
     @Override
@@ -124,5 +128,4 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
             }, 1000);
         }
     }
-
 }

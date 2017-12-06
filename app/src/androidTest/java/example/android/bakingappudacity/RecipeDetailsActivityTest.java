@@ -17,8 +17,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
  * Created by sheri on 12/6/2017.
@@ -37,15 +35,16 @@ public class RecipeDetailsActivityTest {
     }
 
     @Test
+    public void testToolbar() throws Exception {
+        onView(withId(R.id.details_toolbar)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void checkFragmentsIsShown() throws Exception {
         onView(withId(R.id.fragment1_container)).check(matches(isDisplayed()));
         onView(withId(R.id.fragment2_container)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testToolbar() throws Exception {
-        onView(withId(R.id.details_toolbar)).check(matches(isDisplayed()));
-    }
 
     @After
     public void unregister() {

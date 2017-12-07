@@ -13,8 +13,8 @@ import android.widget.RemoteViews;
 import java.util.List;
 
 import example.android.bakingappudacity.R;
+import example.android.bakingappudacity.models.Ingredient;
 import example.android.bakingappudacity.models.Recipe;
-import example.android.bakingappudacity.models.Step;
 import example.android.bakingappudacity.network.retrofit.ApiClient;
 import example.android.bakingappudacity.network.retrofit.ApiInterface;
 import example.android.bakingappudacity.utility.Utility;
@@ -45,10 +45,12 @@ public class BakingAppWidget extends AppWidgetProvider {
                         List<Recipe> mRecipes = response.body();
                         int selectedRecipe = Utility.getSelectedRecipeIndex(context);
                         views.setTextViewText(R.id.recipe_name_text_view_widget, mRecipes.get(selectedRecipe).getRecipeName());
-                        StringBuilder steps = new StringBuilder();
-                        for (Step step : mRecipes.get(selectedRecipe).getSteps()) {
-                            steps.append(" - ").append(step.getShortDescription()).append("\n");
+                        StringBuilder ingredients = new StringBuilder();
+                        for (Ingredient ingredient : mRecipes.get(selectedRecipe).getIngredients()) {
+                            Log.d("ingredient", ingredient.getIngredient());
+                            ingredients.append(" - ").append(ingredient.getIngredient()).append("\n");
                         }
+                        views.setTextViewText(R.id.tv_ingredient_ingredient_text_widget, ingredients);
                         final AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                         final ComponentName componentName = new ComponentName(context, BakingAppWidget.class);
                         widgetManager.updateAppWidget(componentName, views);

@@ -61,14 +61,20 @@ public class RecipesActivity extends AppCompatActivity {
                 RecipeDetailsActivity.startActivity(RecipesActivity.this, recipe, position);
             }
         });
-        if (savedInstanceState == null) {
-            mPresenter = new RecipePresenter(this);
-            mPresenter.onTakeView(this);
-        } else {
-            mRecipes = savedInstanceState.getParcelable(RECIPES_LIST);
+
+        if (savedInstanceState != null) {
+            mRecipes = savedInstanceState.getParcelableArrayList(RECIPES_LIST);
             mRecipeAdapter.updateAdapter(mRecipes);
         }
+
         getIdlingResource();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPresenter = new RecipePresenter(this);
+        mPresenter.onTakeView(this);
     }
 
     @VisibleForTesting
@@ -88,7 +94,7 @@ public class RecipesActivity extends AppCompatActivity {
                 public void run() {
                     mIdlingResource.setIdleState(true);
                 }
-            }, 2000);
+            }, 1000);
         }
     }
 

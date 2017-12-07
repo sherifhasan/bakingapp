@@ -13,10 +13,11 @@
         android:textSize="@dimen/large_text_size" />
 
     <TextView
-        android:id="@+id/step_short_desc_text_widget"
+        android:id="@+id/tv_ingredient_ingredient_text_widget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:textColor="@color/light_grey"
         android:textSize="@dimen/mid_text_size" />
 
 </LinearLayout>

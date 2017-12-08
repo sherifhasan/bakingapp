@@ -64,7 +64,7 @@ public class RecipeStepDetailFragment extends Fragment {
     Button mNextStepButton;
     int currentPosition;
     long exoPlayerSeekPosition;
-    String mediaUrl;
+    String mediaVideoUrl;
 
     public static RecipeStepDetailFragment newInstance(Recipe step, int pos) {
         Bundle args = new Bundle();
@@ -89,8 +89,8 @@ public class RecipeStepDetailFragment extends Fragment {
             if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null) {
                 Step step = recipe.getSteps().get(currentPosition);
                 initViews(step);
-                mediaUrl = step.getVideoURL();
-                initializePlayer(mediaUrl);
+                mediaVideoUrl = step.getVideoURL();
+                initializePlayer(mediaVideoUrl);
             }
         } else if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA_INSTANCE) && getArguments().getParcelable(ARGUMENT_EXTRA_INSTANCE) != null) {
             exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
@@ -99,8 +99,8 @@ public class RecipeStepDetailFragment extends Fragment {
             if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null) {
                 Step step = recipe.getSteps().get(currentPosition);
                 initViews(step);
-                mediaUrl = step.getVideoURL();
-                initializePlayer(mediaUrl);
+                mediaVideoUrl = step.getVideoURL();
+                initializePlayer(mediaVideoUrl);
             }
         }
         return rootView;
@@ -117,8 +117,8 @@ public class RecipeStepDetailFragment extends Fragment {
                 currentPosition = Math.max(0, currentPosition - 1);
                 Step step = recipe.getSteps().get(currentPosition);
                 initViews(step);
-                mediaUrl = step.getVideoURL();
-                initializePlayer(mediaUrl);
+                mediaVideoUrl = step.getVideoURL();
+                initializePlayer(mediaVideoUrl);
                 break;
             case R.id.next_step:
                 if (mPlayer != null) {
@@ -128,8 +128,8 @@ public class RecipeStepDetailFragment extends Fragment {
                 currentPosition = Math.min(recipe.getSteps().size() - 1, currentPosition + 1);
                 step = recipe.getSteps().get(currentPosition);
                 initViews(step);
-                mediaUrl = step.getVideoURL();
-                initializePlayer(mediaUrl);
+                mediaVideoUrl = step.getVideoURL();
+                initializePlayer(mediaVideoUrl);
                 break;
         }
     }
@@ -205,7 +205,7 @@ public class RecipeStepDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
-        initializePlayer(mediaUrl);
+        initializePlayer(mediaVideoUrl);
     }
 
     @Override

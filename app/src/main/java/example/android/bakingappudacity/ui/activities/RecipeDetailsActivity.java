@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -47,10 +46,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
     int selectedRecipe;
     @BindView(R.id.recipe_image)
     ImageView mImageView;
-    @BindView(R.id.nested_scroll)
+    /*@BindView(R.id.nested_scroll)
     NestedScrollView mScrollView;
     public static int scrollX = 0;
-    public static int scrollY = -1;
+    public static int scrollY = -1;*/
 
 
     public static void startActivity(Context context, Recipe recipe, int position) {
@@ -81,13 +80,13 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
                 Picasso.with(this).load(imageUrl).into(mImageView);
             }
 
-            if (savedInstanceState == null) {
-                RecipeIngredientFragment ingredientFragment = RecipeIngredientFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment1_container, ingredientFragment).commit();
 
-                RecipeStepsFragment stepsFragment = RecipeStepsFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment2_container, stepsFragment).commit();
-            }
+            RecipeIngredientFragment ingredientFragment = RecipeIngredientFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment1_container, ingredientFragment).commit();
+
+            RecipeStepsFragment stepsFragment = RecipeStepsFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment2_container, stepsFragment).commit();
+
         }
 
         mFabButton.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +115,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
             RecipeStepDetail.startActivity(getApplicationContext(), recipe, pos);
         }
     }
-
+/*
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putIntArray(SCROLL_POSITION, new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
@@ -131,5 +130,5 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
                     mScrollView.scrollTo(position[0], position[1]);
                 }
             });
-    }
+    }*/
 }

@@ -3,6 +3,7 @@ package example.android.bakingappudacity.ui.activities;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -73,15 +74,20 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
             selectedRecipe = getIntent().getExtras().getInt(SELECTED_RECIPE);
             getSupportActionBar().setTitle(recipe.getRecipeName());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            Uri imageUrl = null;
             if (!TextUtils.isEmpty(recipe.getRecipeImage())) {
                 mImageView.setVisibility(View.VISIBLE);
-                Picasso.with(this).load(recipe.getRecipeImage()).into(mImageView);
+                imageUrl = Uri.parse(recipe.getRecipeImage());
+                Picasso.with(this).load(imageUrl).into(mImageView);
             }
-            RecipeIngredientFragment ingredientFragment = RecipeIngredientFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment1_container, ingredientFragment).commit();
 
-            RecipeStepsFragment stepsFragment = RecipeStepsFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment2_container, stepsFragment).commit();
+            if (savedInstanceState == null) {
+                RecipeIngredientFragment ingredientFragment = RecipeIngredientFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment1_container, ingredientFragment).commit();
+
+                RecipeStepsFragment stepsFragment = RecipeStepsFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment2_container, stepsFragment).commit();
+            }
         }
 
         mFabButton.setOnClickListener(new View.OnClickListener() {

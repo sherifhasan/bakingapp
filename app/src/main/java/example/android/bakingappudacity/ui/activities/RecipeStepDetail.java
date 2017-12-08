@@ -44,9 +44,10 @@ public class RecipeStepDetail extends AppCompatActivity {
             position = getIntent().getExtras().getInt(POSITION);
             Log.d("Pos", position + "");
             getSupportActionBar().setTitle(recipe.getRecipeName());
-
-            RecipeStepDetailFragment stepsFragment = RecipeStepDetailFragment.newInstance(recipe, position);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_step_container_detail, stepsFragment).commit();
+            if (savedInstanceState == null) {
+                RecipeStepDetailFragment stepsFragment = RecipeStepDetailFragment.newInstance(recipe, position);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_step_container_detail, stepsFragment).commit();
+            }
         }
     }
 }

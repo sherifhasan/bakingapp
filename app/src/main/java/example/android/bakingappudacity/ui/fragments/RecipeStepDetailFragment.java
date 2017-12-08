@@ -1,5 +1,6 @@
 package example.android.bakingappudacity.ui.fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +48,8 @@ public class RecipeStepDetailFragment extends Fragment {
     private static final String ARGUMENT_EXTRA = "Recipe";
     private static final String POSITION = "pos";
     private static final String SEEK_POSITION = "player_seek";
-
+    private static final String ARGUMENT_EXTRA_INSTANCE = "Recipe_inst";
+    private static final String POSITION_INSTANCE = "pos_inst";
     Recipe recipe;
     @BindView(R.id.video_player)
     SimpleExoPlayerView mPlayerContainer;
@@ -85,14 +87,13 @@ public class RecipeStepDetailFragment extends Fragment {
             recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
             if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
                 initViews(recipe.getSteps().get(currentPosition));
+        } else if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA_INSTANCE) && getArguments().getParcelable(ARGUMENT_EXTRA_INSTANCE) != null) {
+            exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
+            recipe = getArguments().getParcelable(ARGUMENT_EXTRA_INSTANCE);
+            currentPosition = getArguments().getInt(POSITION_INSTANCE);
+            if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
+                initViews(recipe.getSteps().get(currentPosition));
         }
-        exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
-        recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
-        currentPosition = getArguments().getInt(POSITION);
-        if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
-            initViews(recipe.getSteps().get(currentPosition));
-
-
         return rootView;
     }
 
@@ -101,6 +102,7 @@ public class RecipeStepDetailFragment extends Fragment {
         switch (view.getId()) {
             case R.id.prev_step:
                 if (mPlayer != null) {
+                    exoPlayerSeekPosition = 0;
                     mPlayer.stop();
                 }
                 currentPosition = Math.max(0, currentPosition - 1);
@@ -108,6 +110,7 @@ public class RecipeStepDetailFragment extends Fragment {
                 break;
             case R.id.next_step:
                 if (mPlayer != null) {
+                    exoPlayerSeekPosition = 0;
                     mPlayer.stop();
                 }
                 currentPosition = Math.min(recipe.getSteps().size() - 1, currentPosition + 1);
@@ -157,19 +160,19 @@ public class RecipeStepDetailFragment extends Fragment {
     private void initializePlayer(Step step) {
 
         mPlayerContainer.setVisibility(View.VISIBLE);
-
+        Context context = getActivity();
         if (mPlayer == null) {
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
             TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-            mPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+            mPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
         }
 
         mPlayerContainer.setPlayer(mPlayer);
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
-                getContext(),
-                Util.getUserAgent(getContext(), getString(R.string.app_name))
+                context,
+                Util.getUserAgent(context, getString(R.string.app_name))
         );
 
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
@@ -188,8 +191,8 @@ public class RecipeStepDetailFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Bundle outState = new Bundle();
-        outState.putInt(POSITION, currentPosition);
-        outState.putParcelable(ARGUMENT_EXTRA, recipe);
+        outState.putInt(POSITION_INSTANCE, currentPosition);
+        outState.putParcelable(ARGUMENT_EXTRA_INSTANCE, recipe);
         if (mPlayer != null) {
             outState.putLong(SEEK_POSITION, mPlayer.getCurrentPosition());
         }
@@ -205,5 +208,4 @@ public class RecipeStepDetailFragment extends Fragment {
         mPlayer.release();
         mPlayer = null;
     }
-
 }

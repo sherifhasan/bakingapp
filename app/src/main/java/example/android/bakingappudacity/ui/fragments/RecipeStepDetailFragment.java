@@ -3,6 +3,7 @@ package example.android.bakingappudacity.ui.fragments;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -85,12 +86,13 @@ public class RecipeStepDetailFragment extends Fragment {
                 currentPosition = getArguments().getInt(POSITION);
                 recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
                 if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
-                    initViews(recipe.getSteps().get(currentPosition),0);
+                    initViews(recipe.getSteps().get(currentPosition), 0);
             }
         } else {
-            recipe = savedInstanceState.getParcelable(ARGUMENT_EXTRA);
-            exoPlayerSeekPosition = savedInstanceState.getLong(SEEK_POSITION);
-            currentPosition = savedInstanceState.getInt(POSITION);
+            Bundle bundle = getArguments();
+            exoPlayerSeekPosition = bundle.getLong(SEEK_POSITION);
+            recipe = bundle.getParcelable(ARGUMENT_EXTRA);
+            currentPosition = bundle.getInt(POSITION);
             if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
                 initViews(recipe.getSteps().get(currentPosition), exoPlayerSeekPosition);
         }
@@ -164,7 +166,6 @@ public class RecipeStepDetailFragment extends Fragment {
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
             TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
             mPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
         }
 
@@ -179,18 +180,24 @@ public class RecipeStepDetailFragment extends Fragment {
         Uri videoUrl = null;
         if (!TextUtils.isEmpty(step.getVideoURL())) {
             videoUrl = Uri.parse(step.getVideoURL());
-        } else if (!TextUtils.isEmpty(step.getThumbnailURL())) {
-            videoUrl = Uri.parse(step.getThumbnailURL());
         }
         MediaSource videoSource = new ExtractorMediaSource(videoUrl, dataSourceFactory, extractorsFactory, null, null);
         mPlayer.prepare(videoSource);
         if (playerSeekPosition != 0)
             mPlayer.seekTo(playerSeekPosition);
+        mPlayer.setPlayWhenReady(true);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
+        Bundle outState = new Bundle();
+        outState.putInt(POSITION, currentPosition);
+        outState.putParcelable(ARGUMENT_EXTRA, recipe);
+        if (mPlayer != null) {
+            outState.putLong(SEEK_POSITION, mPlayer.getCurrentPosition());
+        }
+        setArguments(outState);
         releasePlayer();
     }
 
@@ -203,13 +210,4 @@ public class RecipeStepDetailFragment extends Fragment {
         mPlayer = null;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(POSITION, currentPosition);
-        outState.putParcelable(ARGUMENT_EXTRA, recipe);
-        if (mPlayer != null) {
-            outState.putLong(SEEK_POSITION, mPlayer.getCurrentPosition());
-        }
-    }
 }

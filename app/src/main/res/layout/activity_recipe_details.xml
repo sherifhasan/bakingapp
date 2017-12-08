@@ -28,17 +28,31 @@
         android:layout_marginTop="@dimen/some_large_space"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/recipe_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <FrameLayout
             android:id="@+id/fragment1_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fillViewport="true" />
 
         <FrameLayout
             android:id="@+id/fragment2_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fillViewport="true" />
 
@@ -46,7 +60,7 @@
             android:id="@+id/save_to_widget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginBottom="@dimen/some_space"
             android:layout_marginEnd="@dimen/some_space"
             android:clickable="true"

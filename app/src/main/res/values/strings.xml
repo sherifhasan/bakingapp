@@ -16,4 +16,8 @@
     <string name="add_widget">Add widget</string>
     <string name="add">added to widget</string>
     <string name="appwidget_text">EXAMPLE</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_test">Test</string>
 </resources>

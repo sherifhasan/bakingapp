@@ -4,17 +4,17 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.FloatingActionButton;
-import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +43,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
     @BindView(R.id.save_to_widget)
     FloatingActionButton mFabButton;
     int selectedRecipe;
-
+    @BindView(R.id.recipe_image)
+    ImageView mImageView;
     @Nullable
     private SimpleIdlingResource mIdlingResource;
 
@@ -69,17 +70,17 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
             selectedRecipe = getIntent().getExtras().getInt(SELECTED_RECIPE);
             getSupportActionBar().setTitle(recipe.getRecipeName());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+            if (!TextUtils.isEmpty(recipe.getRecipeImage())) {
+                mImageView.setVisibility(View.VISIBLE);
+                Picasso.with(this).load(recipe.getRecipeImage()).into(mImageView);
+            }
             RecipeIngredientFragment ingredientFragment = RecipeIngredientFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment1_container, ingredientFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment1_container, ingredientFragment).commit();
 
             RecipeStepsFragment stepsFragment = RecipeStepsFragment.newInstance((Recipe) getIntent().getExtras().getParcelable(EXTRA_RECIPE));
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment2_container, stepsFragment).commit();
-        } else {
-            if (mIdlingResource != null) {
-                mIdlingResource.setIdleState(false);
-            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment2_container, stepsFragment).commit();
         }
+
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +94,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
                 Toast.makeText(RecipeDetailsActivity.this, recipe.getRecipeName() + " " + getString(R.string.add), Toast.LENGTH_LONG).show();
             }
         });
-        getIdlingResource();
     }
 
     @Override
@@ -105,27 +105,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
                     .commit();
         } else {
             RecipeStepDetail.startActivity(getApplicationContext(), recipe, pos);
-        }
-    }
-
-    @VisibleForTesting
-    @NonNull
-    public IdlingResource getIdlingResource() {
-        if (mIdlingResource == null) {
-            mIdlingResource = new SimpleIdlingResource();
-        }
-        return mIdlingResource;
-    }
-
-    private void setIdleState() {
-        if (mIdlingResource != null) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mIdlingResource.setIdleState(true);
-                }
-            }, 1000);
         }
     }
 }

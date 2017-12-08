@@ -8,7 +8,7 @@ import java.util.List;
 import example.android.bakingappudacity.models.Recipe;
 import example.android.bakingappudacity.network.retrofit.ApiClient;
 import example.android.bakingappudacity.network.retrofit.ApiInterface;
-import example.android.bakingappudacity.ui.activities.RecipesActivity;
+import example.android.bakingappudacity.ui.fragments.RecipesFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +24,7 @@ public class RecipePresenter {
 
     private List<Recipe> mRecipes;
     private Throwable mError;
-    private RecipesActivity mView;
+    private RecipesFragment mView;
     private Context mContext;
 
     public RecipePresenter(Context context) {
@@ -59,7 +59,7 @@ public class RecipePresenter {
         }
     }
 
-    public void onTakeView(RecipesActivity view) {
+    public void onTakeView(RecipesFragment view) {
         this.mView = view;
         publish();
     }

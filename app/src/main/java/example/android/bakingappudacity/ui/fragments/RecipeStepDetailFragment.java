@@ -64,6 +64,7 @@ public class RecipeStepDetailFragment extends Fragment {
     Button mNextStepButton;
     int currentPosition;
     long exoPlayerSeekPosition;
+    String mediaUrl;
 
     public static RecipeStepDetailFragment newInstance(Recipe step, int pos) {
         Bundle args = new Bundle();
@@ -85,14 +86,22 @@ public class RecipeStepDetailFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
             currentPosition = getArguments().getInt(POSITION);
             recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
-            if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
-                initViews(recipe.getSteps().get(currentPosition));
+            if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null) {
+                Step step = recipe.getSteps().get(currentPosition);
+                initViews(step);
+                mediaUrl = step.getVideoURL();
+                initializePlayer(mediaUrl);
+            }
         } else if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA_INSTANCE) && getArguments().getParcelable(ARGUMENT_EXTRA_INSTANCE) != null) {
             exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
             recipe = getArguments().getParcelable(ARGUMENT_EXTRA_INSTANCE);
             currentPosition = getArguments().getInt(POSITION_INSTANCE);
-            if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
-                initViews(recipe.getSteps().get(currentPosition));
+            if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null) {
+                Step step = recipe.getSteps().get(currentPosition);
+                initViews(step);
+                mediaUrl = step.getVideoURL();
+                initializePlayer(mediaUrl);
+            }
         }
         return rootView;
     }
@@ -106,7 +115,10 @@ public class RecipeStepDetailFragment extends Fragment {
                     mPlayer.stop();
                 }
                 currentPosition = Math.max(0, currentPosition - 1);
-                initViews(recipe.getSteps().get(currentPosition));
+                Step step = recipe.getSteps().get(currentPosition);
+                initViews(step);
+                mediaUrl = step.getVideoURL();
+                initializePlayer(mediaUrl);
                 break;
             case R.id.next_step:
                 if (mPlayer != null) {
@@ -114,7 +126,10 @@ public class RecipeStepDetailFragment extends Fragment {
                     mPlayer.stop();
                 }
                 currentPosition = Math.min(recipe.getSteps().size() - 1, currentPosition + 1);
-                initViews(recipe.getSteps().get(currentPosition));
+                step = recipe.getSteps().get(currentPosition);
+                initViews(step);
+                mediaUrl = step.getVideoURL();
+                initializePlayer(mediaUrl);
                 break;
         }
     }
@@ -154,10 +169,9 @@ public class RecipeStepDetailFragment extends Fragment {
 
         mStepInstructionTextView.setText(step.getDescription());
 
-        initializePlayer(step);
     }
 
-    private void initializePlayer(Step step) {
+    private void initializePlayer(String videoUrlString) {
 
         mPlayerContainer.setVisibility(View.VISIBLE);
         Context context = getActivity();
@@ -177,14 +191,21 @@ public class RecipeStepDetailFragment extends Fragment {
 
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         Uri videoUrl = null;
-        if (!TextUtils.isEmpty(step.getVideoURL())) {
-            videoUrl = Uri.parse(step.getVideoURL());
+        if (!TextUtils.isEmpty(videoUrlString)) {
+            videoUrl = Uri.parse(videoUrlString);
         }
         MediaSource videoSource = new ExtractorMediaSource(videoUrl, dataSourceFactory, extractorsFactory, null, null);
         mPlayer.prepare(videoSource);
         if (exoPlayerSeekPosition != 0)
             mPlayer.seekTo(exoPlayerSeekPosition);
         mPlayer.setPlayWhenReady(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
+        initializePlayer(mediaUrl);
     }
 
     @Override

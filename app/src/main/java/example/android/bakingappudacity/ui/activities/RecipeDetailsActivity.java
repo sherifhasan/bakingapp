@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -95,7 +96,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
                 int[] ids = {R.xml.baking_app_widget_info};
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 sendBroadcast(intent);
-                Toast.makeText(RecipeDetailsActivity.this, recipe.getRecipeName() + " " + getString(R.string.add), Toast.LENGTH_LONG).show();
+
+                Snackbar.make(view, recipe.getRecipeName() + " " + getString(R.string.add), Snackbar.LENGTH_LONG).show();
             }
         });
     }

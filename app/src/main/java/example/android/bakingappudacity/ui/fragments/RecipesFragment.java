@@ -2,6 +2,7 @@ package example.android.bakingappudacity.ui.fragments;
 
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +92,7 @@ public class RecipesFragment extends Fragment {
     }
 
     public void onRecipesError(Throwable throwable) {
-        Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(), throwable.getMessage(), Snackbar.LENGTH_LONG).show();
     }
 
     @Override

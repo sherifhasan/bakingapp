@@ -3,7 +3,6 @@ package example.android.bakingappudacity.ui.fragments;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -81,21 +80,18 @@ public class RecipeStepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, rootView);
-        if (savedInstanceState == null) {
-            if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
-                currentPosition = getArguments().getInt(POSITION);
-                recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
-                if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
-                    initViews(recipe.getSteps().get(currentPosition), 0);
-            }
-        } else {
-            Bundle bundle = getArguments();
-            exoPlayerSeekPosition = bundle.getLong(SEEK_POSITION);
-            recipe = bundle.getParcelable(ARGUMENT_EXTRA);
-            currentPosition = bundle.getInt(POSITION);
+        if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA) && getArguments().getParcelable(ARGUMENT_EXTRA) != null) {
+            currentPosition = getArguments().getInt(POSITION);
+            recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
             if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
-                initViews(recipe.getSteps().get(currentPosition), exoPlayerSeekPosition);
+                initViews(recipe.getSteps().get(currentPosition));
         }
+        exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
+        recipe = getArguments().getParcelable(ARGUMENT_EXTRA);
+        currentPosition = getArguments().getInt(POSITION);
+        if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null)
+            initViews(recipe.getSteps().get(currentPosition));
+
 
         return rootView;
     }
@@ -108,19 +104,19 @@ public class RecipeStepDetailFragment extends Fragment {
                     mPlayer.stop();
                 }
                 currentPosition = Math.max(0, currentPosition - 1);
-                initViews(recipe.getSteps().get(currentPosition), exoPlayerSeekPosition);
+                initViews(recipe.getSteps().get(currentPosition));
                 break;
             case R.id.next_step:
                 if (mPlayer != null) {
                     mPlayer.stop();
                 }
                 currentPosition = Math.min(recipe.getSteps().size() - 1, currentPosition + 1);
-                initViews(recipe.getSteps().get(currentPosition), exoPlayerSeekPosition);
+                initViews(recipe.getSteps().get(currentPosition));
                 break;
         }
     }
 
-    private void initViews(Step step, long seekPosition) {
+    private void initViews(Step step) {
 
         if (currentPosition > 0) {
             mPrevStepButton.setVisibility(View.VISIBLE);
@@ -155,10 +151,10 @@ public class RecipeStepDetailFragment extends Fragment {
 
         mStepInstructionTextView.setText(step.getDescription());
 
-        initializePlayer(step, seekPosition);
+        initializePlayer(step);
     }
 
-    private void initializePlayer(Step step, long playerSeekPosition) {
+    private void initializePlayer(Step step) {
 
         mPlayerContainer.setVisibility(View.VISIBLE);
 
@@ -183,8 +179,8 @@ public class RecipeStepDetailFragment extends Fragment {
         }
         MediaSource videoSource = new ExtractorMediaSource(videoUrl, dataSourceFactory, extractorsFactory, null, null);
         mPlayer.prepare(videoSource);
-        if (playerSeekPosition != 0)
-            mPlayer.seekTo(playerSeekPosition);
+        if (exoPlayerSeekPosition != 0)
+            mPlayer.seekTo(exoPlayerSeekPosition);
         mPlayer.setPlayWhenReady(true);
     }
 

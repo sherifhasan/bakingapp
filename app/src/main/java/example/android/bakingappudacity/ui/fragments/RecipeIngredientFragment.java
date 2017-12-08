@@ -28,6 +28,7 @@ public class RecipeIngredientFragment extends Fragment {
     IngredientAdapter mIngredientAdapter;
     RecyclerView.LayoutManager mIngredientLayoutManager;
     private Recipe recipe;
+    int currentVisiblePosition = 0;
 
     public RecipeIngredientFragment() {
     }
@@ -75,5 +76,18 @@ public class RecipeIngredientFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(ARGUMENT_EXTRA, recipe);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        currentVisiblePosition = ((LinearLayoutManager) mIngredientRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mIngredientRecyclerView.getLayoutManager().scrollToPosition(currentVisiblePosition);
+        currentVisiblePosition = 0;
     }
 }

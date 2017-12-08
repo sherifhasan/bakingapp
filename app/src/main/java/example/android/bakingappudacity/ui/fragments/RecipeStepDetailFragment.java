@@ -50,6 +50,7 @@ public class RecipeStepDetailFragment extends Fragment {
     private static final String SEEK_POSITION = "player_seek";
     private static final String ARGUMENT_EXTRA_INSTANCE = "Recipe_inst";
     private static final String POSITION_INSTANCE = "pos_inst";
+    private static final String PLAYER_READY = "player_ready";
     Recipe recipe;
     @BindView(R.id.video_player)
     SimpleExoPlayerView mPlayerContainer;
@@ -65,6 +66,7 @@ public class RecipeStepDetailFragment extends Fragment {
     int currentPosition;
     long exoPlayerSeekPosition;
     String mediaVideoUrl;
+    boolean playWhenReady;
 
     public static RecipeStepDetailFragment newInstance(Recipe step, int pos) {
         Bundle args = new Bundle();
@@ -94,6 +96,7 @@ public class RecipeStepDetailFragment extends Fragment {
             }
         } else if (getArguments() != null && getArguments().containsKey(ARGUMENT_EXTRA_INSTANCE) && getArguments().getParcelable(ARGUMENT_EXTRA_INSTANCE) != null) {
             exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
+            playWhenReady = getArguments().getBoolean(PLAYER_READY);
             recipe = getArguments().getParcelable(ARGUMENT_EXTRA_INSTANCE);
             currentPosition = getArguments().getInt(POSITION_INSTANCE);
             if (recipe.getSteps() != null && recipe.getSteps().get(currentPosition) != null) {
@@ -112,6 +115,7 @@ public class RecipeStepDetailFragment extends Fragment {
             case R.id.prev_step:
                 if (mPlayer != null) {
                     exoPlayerSeekPosition = 0;
+                    playWhenReady = true;
                     mPlayer.stop();
                 }
                 currentPosition = Math.max(0, currentPosition - 1);
@@ -123,6 +127,7 @@ public class RecipeStepDetailFragment extends Fragment {
             case R.id.next_step:
                 if (mPlayer != null) {
                     exoPlayerSeekPosition = 0;
+                    playWhenReady = true;
                     mPlayer.stop();
                 }
                 currentPosition = Math.min(recipe.getSteps().size() - 1, currentPosition + 1);
@@ -198,13 +203,14 @@ public class RecipeStepDetailFragment extends Fragment {
         mPlayer.prepare(videoSource);
         if (exoPlayerSeekPosition != 0)
             mPlayer.seekTo(exoPlayerSeekPosition);
-        mPlayer.setPlayWhenReady(true);
+        mPlayer.setPlayWhenReady(playWhenReady);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         exoPlayerSeekPosition = getArguments().getLong(SEEK_POSITION);
+        playWhenReady = getArguments().getBoolean(PLAYER_READY);
         initializePlayer(mediaVideoUrl);
     }
 
@@ -216,6 +222,7 @@ public class RecipeStepDetailFragment extends Fragment {
         outState.putParcelable(ARGUMENT_EXTRA_INSTANCE, recipe);
         if (mPlayer != null) {
             outState.putLong(SEEK_POSITION, mPlayer.getCurrentPosition());
+            outState.putBoolean(PLAYER_READY, mPlayer.getPlayWhenReady());
         }
         setArguments(outState);
         releasePlayer();

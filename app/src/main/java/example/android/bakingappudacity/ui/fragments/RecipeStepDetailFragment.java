@@ -199,6 +199,7 @@ public class RecipeStepDetailFragment extends Fragment {
         if (exoPlayerSeekPosition != 0)
             mPlayer.seekTo(exoPlayerSeekPosition);
         mPlayer.setPlayWhenReady(true);
+
     }
 
     @Override

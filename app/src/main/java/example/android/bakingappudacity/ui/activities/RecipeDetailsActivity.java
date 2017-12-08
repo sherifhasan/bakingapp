@@ -46,10 +46,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
     int selectedRecipe;
     @BindView(R.id.recipe_image)
     ImageView mImageView;
-    /*@BindView(R.id.nested_scroll)
-    NestedScrollView mScrollView;
-    public static int scrollX = 0;
-    public static int scrollY = -1;*/
 
 
     public static void startActivity(Context context, Recipe recipe, int position) {
@@ -115,20 +111,5 @@ public class RecipeDetailsActivity extends AppCompatActivity implements PanesHan
             RecipeStepDetail.startActivity(getApplicationContext(), recipe, pos);
         }
     }
-/*
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putIntArray(SCROLL_POSITION, new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
-    }
 
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        final int[] position = savedInstanceState.getIntArray(SCROLL_POSITION);
-        if (position != null)
-            mScrollView.post(new Runnable() {
-                public void run() {
-                    mScrollView.scrollTo(position[0], position[1]);
-                }
-            });
-    }*/
 }
